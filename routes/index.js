@@ -6,9 +6,12 @@ const { closersdb } = require('./mysql')
 
 
 /* GET home page. */
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
+  console.log(req.body.accountName)
   const data = await closersdb(`SELECT * FROM characters`)
   // res.send(data)
+  console.log(`일일 초기화 시간 : ${last4Hour}`)
+  console.log(`주간 초기화 시간 : ${lastweek}`)
   await closersdb(`DELETE FROM record WHERE time < '${last4Hour}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 0 and is_raid = 0)`);
   await closersdb(`DELETE FROM record WHERE time < '${lastweek}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 1 or is_raid = 1)`);
   res.send(data
@@ -40,7 +43,7 @@ router.post('/db/check', async (req, res) => {
   res.send(await closersdb(`SELECT * FROM record WHERE \`character\` = '${name}'`))
 });
 
-router.get('/db/check/daily', async (req, res) => {
+router.post('/db/check/daily', async (req, res) => {
   const row = await closersdb(`SELECT * FROM record WHERE dungeon = '형상 복제자 저지 작전' or dungeon = '무한 엘리베이터'`)
   if (!row) res.sendStatus(500)
   res.send([row.filter(r => r.dungeon == '형상 복제자 저지 작전'), row.filter(r => r.dungeon == '무한 엘리베이터')]);
