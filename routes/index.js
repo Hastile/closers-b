@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { last4Hour, lastweek } = require('./time')
+const { today, today_gethour, today_getday, last4Hour, lastweek } = require('./time')
 const { closersdb } = require('./mysql')
 
 
@@ -10,6 +10,7 @@ router.post('/', async (req, res) => {
   console.log(req.body.accountName)
   const data = await closersdb(`SELECT * FROM characters`)
   // res.send(data)
+  console.log(`현재 시간 : ${today}, gethour: ${today_gethour}, getday: ${today_getday}`)
   console.log(`일일 초기화 시간 : ${last4Hour}`)
   console.log(`주간 초기화 시간 : ${lastweek}`)
   await closersdb(`DELETE FROM record WHERE time < '${last4Hour}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 0 and is_raid = 0)`);
