@@ -14,6 +14,8 @@ const lastweek = today.set('day', 6).startOf('day').add(4, 'hour');
 
 module.exports = {
     today: today.format('YYYY-MM-DD HH:mm:ss'),
+    today_gethour: today.get('hour'),
+    today_getday: today.get('day'),
     last4Hour: (today.get('hour') < 4 ? last4Hour.subtract(1, 'day') : last4Hour).format('YYYY-MM-DD HH:mm:ss'),
     lastweek: (today.get('day') < 6 ? lastweek.subtract(1, 'week') : today.get('hour') < 4 ? lastweek.subtract(1, 'week') : lastweek).format('YYYY-MM-DD HH:mm:ss')
 }
