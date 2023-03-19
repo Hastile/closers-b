@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const dateUtil = require('./DateUtil');
+const dateUtil = require('./time');
 const { closersdb } = require('./mysql');
 
 /* GET home page. */
