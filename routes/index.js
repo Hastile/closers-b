@@ -59,7 +59,7 @@ router.post('/db/check/raid', async (req, res) => {
   const { name } = req.body
   const row = await closersdb(`SELECT * FROM record WHERE \`character\` = '${name}' AND dungeon IN (SELECT name FROM dungeons WHERE is_raid = 1)`)
   const count = [row.filter(r => r.dungeon == '기계왕 벨페고르'), row.filter(r => r.dungeon == '야수왕 베히모스')]
-  row ? res.send({data : count, time: last4Hour}) : res.sendStatus(500)
+  row ? res.send({data : count, time: dateUtil.getLast4Hour()}) : res.sendStatus(500)
 });
 
 module.exports = router;
