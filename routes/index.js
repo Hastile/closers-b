@@ -1,20 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-const { today, today_gethour, today_getday, last4Hour, lastweek } = require('./time')
-const { closersdb } = require('./mysql')
-
+const dateUtil = require('./DateUtil');
+const { closersdb } = require('./mysql');
 
 /* GET home page. */
 router.post('/', async (req, res) => {
   console.log(req.body.accountName)
   const data = await closersdb(`SELECT * FROM characters`)
   // res.send(data)
-  console.log(`현재 시간 : ${today}, gethour: ${today_gethour}, getday: ${today_getday}`)
-  console.log(`일일 초기화 시간 : ${last4Hour}`)
-  console.log(`주간 초기화 시간 : ${lastweek}`)
-  await closersdb(`DELETE FROM record WHERE time < '${last4Hour}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 0 and is_raid = 0)`);
-  await closersdb(`DELETE FROM record WHERE time < '${lastweek}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 1 or is_raid = 1)`);
+  console.log(`현재 시간 : ${dateUtil.getToday()}`);
+  console.log(`일일 초기화 시간 : ${dateUtil.getLast4Hour()}`);
+  console.log(`주간 초기화 시간 : ${dateUtil.getLastWeek()}`);
+  await closersdb(`DELETE FROM record WHERE time < '${dateUtil.getLast4Hour()}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 0 and is_raid = 0)`);
+  await closersdb(`DELETE FROM record WHERE time < '${dateUtil.getLastWeek()}' AND dungeon IN (SELECT name FROM dungeons WHERE is_week = 1 or is_raid = 1)`);
   res.send(data
       .sort((a, b) => {
           const p_rank = {
