@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const dateUtil = require('./time');
+
 const { closersdb } = require('./mysql');
 
 /* GET home page. */
 router.post('/', async (req, res) => {
+  const dateUtil = require('./time');
   console.log(req.body.accountName)
   const data = await closersdb(`SELECT * FROM characters`)
   // res.send(data)
